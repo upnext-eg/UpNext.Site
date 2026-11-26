@@ -99,7 +99,7 @@
         color: var(--color-indigo);
     }
 
-    /* Geen gewone scrollbalk: PageScrollbar tekent een eigen dunne balk die van kleur wisselt met de achtergrond. Zonder balk verspringt de pagina ook niet als een popup de scroll vergrendelt. */
+    /* Geen gewone scrollbalk: Scrollbar tekent een eigen dunne balk die van kleur wisselt met de achtergrond. Zonder balk verspringt de pagina ook niet als een popup de scroll vergrendelt. */
     html {
         scrollbar-width: none;
     }

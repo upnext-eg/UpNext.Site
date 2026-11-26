@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+@import '@fontsource/anton/latin-400.css';
+@import '@fontsource/manrope/latin-600.css';
+@import '@fontsource/manrope/latin-700.css';
+@import '@fontsource/manrope/latin-800.css';
+
+/* Kleuren en vormen uit de app (UpNext.Client/src/colors.ts en src/Theme/sizes.ts). Alleen deze palette: geen Tailwind-standaardkleuren. */
+@theme {
+    --color-*: initial;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-yellow: #fff21a;
+    --color-violet: #6a2bf0;
+    --color-purple: #4a14d4;
+    --color-royal-purple: #4414c6;
+    --color-indigo: #3a0fb0;
+    --color-amethyst: #6439ba;
+    --color-lavender: #d9c8ff;
+    --color-pink: #f0d0ec;
+    --color-blush: #f9e4f5;
+    --color-orchid: #eab9e3;
+    --color-midnight: #0f0046;
+    --color-periwinkle: #b9a0ff;
+    --color-navy: #2a0a80;
+    --color-red: #e0261f;
+
+    --font-display: 'Anton', 'Impact', sans-serif;
+    --font-sans: 'Manrope', system-ui, sans-serif;
+
+    --radius-row: 10px;
+    --radius-row-tail: 25px;
+    --radius-field: 16px;
+    --radius-card: 20px;
+    --radius-card-tail: 50px;
+}
+
+/* Breed genoeg om telefoon en tekst naast elkaar te zetten. Tablet staand valt erbuiten: daar staat de tekst onder de telefoon. */
+@custom-variant wide {
+    @media (min-width: 64rem), (min-width: 48rem) and (orientation: landscape) {
+        @slot;
+    }
+}
+
+@layer base {
+    html {
+        background-color: var(--color-royal-purple);
+        color: var(--color-white);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        min-height: 100svh;
+        font-family: var(--font-sans);
+        font-weight: 600;
+        background-color: var(--color-royal-purple);
+        /* De achtergrond van ScreenBackground in de app, over de hele pagina. */
+        background-image:
+            radial-gradient(90% 60% at 100% 0%, var(--color-violet) 0%, transparent 70%),
+            linear-gradient(180deg, var(--color-purple) 0%, var(--color-royal-purple) 100%);
+        background-attachment: fixed;
+        /* Nooit horizontaal scrollen, zoals in UpNext.Onepager: sommige browsers knippen de 3D-telefoon niet af op de stage. clip maakt geen scrollcontainer, dus het pinnen blijft werken. */
+        overflow-x: clip;
+    }
+
+    ::selection {
+        background-color: var(--color-yellow);
+        color: var(--color-indigo);
+    }
+
+    html {
+        scrollbar-color: var(--color-violet) var(--color-royal-purple);
+    }
+
+    /* Roze ring op paars, zoals in UpNext.Onepager; op roze vlakken zet een component hem op indigo. */
+    :focus-visible {
+        outline: 3px solid var(--color-pink);
+        outline-offset: 3px;
+    }
+}
+
+@utility bg-app {
+    background-color: var(--color-royal-purple);
+    background-image:
+        radial-gradient(130% 45% at 100% 0%, var(--color-violet) 0%, transparent 70%),
+        linear-gradient(180deg, var(--color-purple) 0%, var(--color-royal-purple) 100%);
+}
+
+/* Schaduwen uit UpNext.Onepager (Theme/shadow.ts): altijd met midnight getint, nooit zwart of grijs. */
+@utility shadow-card {
+    box-shadow:
+        0 14px 30px color-mix(in srgb, var(--color-midnight) 40%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--color-white) 70%, transparent);
+}
+
+@utility shadow-footer {
+    box-shadow: 0 -8px 20px color-mix(in srgb, var(--color-midnight) 40%, transparent);
+}
+
+@utility shadow-button {
+    box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--color-midnight) 55%, transparent);
+}
+
+/* De gebogen roze footer van de app. */
+@utility bg-pink-footer {
+    background-image: linear-gradient(180deg, var(--color-blush) 0%, var(--color-orchid) 100%);
+}
+
+/* Placeholders voor een avondfoto en het camerabeeld: lichtvlekken, geen echt beeld. */
+@utility bg-night-photo {
+    background-color: var(--color-midnight);
+    background-image:
+        radial-gradient(
+            28% 34% at 22% 30%,
+            color-mix(in srgb, var(--color-yellow) 75%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            24% 30% at 70% 24%,
+            color-mix(in srgb, var(--color-orchid) 80%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            40% 45% at 52% 88%,
+            color-mix(in srgb, var(--color-violet) 95%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            18% 22% at 88% 70%,
+            color-mix(in srgb, var(--color-periwinkle) 70%, transparent) 0%,
+            transparent 100%
+        );
+}
+
+@utility bg-night-viewfinder {
+    background-image:
+        radial-gradient(
+            22% 16% at 30% 38%,
+            color-mix(in srgb, var(--color-yellow) 70%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            20% 14% at 68% 30%,
+            color-mix(in srgb, var(--color-orchid) 75%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            45% 30% at 50% 78%,
+            color-mix(in srgb, var(--color-violet) 95%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            16% 12% at 86% 56%,
+            color-mix(in srgb, var(--color-periwinkle) 70%, transparent) 0%,
+            transparent 100%
+        ),
+        radial-gradient(
+            14% 10% at 12% 64%,
+            color-mix(in srgb, var(--color-orchid) 50%, transparent) 0%,
+            transparent 100%
+        );
+}
+
+@utility bg-hero-card {
+    background-image: linear-gradient(160deg, var(--color-blush) 0%, var(--color-orchid) 100%);
+}
+
+/* De vorm van RowCard en HeroCard in de app: één grote hoek rechtsonder. */
+@utility rounded-row-shape {
+    border-radius: var(--radius-row) var(--radius-row) var(--radius-row-tail) var(--radius-row);
+}
+
+@utility rounded-card-shape {
+    border-radius: var(--radius-card) var(--radius-card) var(--radius-card-tail) var(--radius-card);
+}
+
+@utility font-display-tight {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.05;
+    text-transform: uppercase;
+}

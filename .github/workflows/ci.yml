@@ -1,6 +1,6 @@
 name: CI
 
-# Cloudflare Pages bouwt en deployt zelf (main naar productie, elke andere branch als preview).
+# Cloudflare (Workers Builds) bouwt en deployt zelf, alleen main, naar productie.
 # Deze checks houden main schoon: met branch protection kan een PR pas naar main als ze groen zijn.
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # dezelfde Node-versie als Cloudflare Pages: die leest ook .node-version
+      # dezelfde Node-versie als de build op Cloudflare: die leest ook .node-version
       - uses: actions/setup-node@v5
         with:
           node-version-file: .node-version
@@ -36,6 +36,6 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-      # tsc -b en vite build: dezelfde build als op Pages
+      # tsc -b en vite build: dezelfde build als op Cloudflare
       - name: Build
         run: npm run build

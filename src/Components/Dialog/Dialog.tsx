@@ -38,21 +38,38 @@ export default function Dialog(props: IProps) {
             ref={ref}
             aria-labelledby={labelledBy}
             onClose={onClose}
-            // Een klik naast de popup (op de achtergrond) komt binnen op het dialog-element zelf.
-            onClick={(event) => event.target === event.currentTarget && onClose()}
-            className='bg-app inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] w-[min(30rem,calc(100%-2rem))] max-w-none overflow-y-auto overscroll-contain rounded-[24px_24px_64px_24px] border border-white/10 p-0 text-white shadow-[0_30px_80px] shadow-midnight/60 backdrop:bg-midnight/75 motion-safe:open:animate-dialog-in'
+            onClick={(event) => {
+                // Een klik op de achtergrond komt binnen op het dialog-element zelf. Alleen sluiten als hij echt buiten de kaart viel:
+                // de marge rond het scrollvak hoort ook bij het dialog-element.
+                if (event.target !== event.currentTarget) {
+                    return;
+                }
+                const card = event.currentTarget.getBoundingClientRect();
+                const isOutside =
+                    event.clientX < card.left ||
+                    event.clientX > card.right ||
+                    event.clientY < card.top ||
+                    event.clientY > card.bottom;
+                if (isOutside) {
+                    onClose();
+                }
+            }}
+            className='bg-app inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] w-[min(30rem,calc(100%-2rem))] max-w-none flex-col overflow-hidden rounded-[24px_24px_64px_24px] border border-white/10 p-0 text-white shadow-[0_30px_80px] shadow-midnight/60 backdrop:bg-midnight/75 open:flex motion-safe:open:animate-dialog-in'
         >
-            <div className='relative flex flex-col gap-5 p-6 pt-7 sm:p-9'>
-                <button
-                    type='button'
-                    onClick={onClose}
-                    aria-label={t(dialogs.close)}
-                    // Sticky: bij een lange tekst (privacyverklaring) blijft de knop in beeld. De negatieve marge haalt zijn ruimte weg, zodat de inhoud ernaast begint.
-                    className='sticky top-3 z-10 -mt-2 -mr-2 -mb-[3.75rem] flex size-11 shrink-0 cursor-pointer items-center justify-center self-end rounded-full border-2 border-pink bg-royal-purple text-pink transition-colors hover:bg-pink/14 sm:-mt-4 sm:-mr-4'
-                >
-                    <Icon name='close' size={22} />
-                </button>
-                {children}
+            {/* Het scrollvak ligt een eindje binnen de rand, met een dunne lavendel balk: zo valt de scrollbalk binnen de ronde hoeken en de staart rechtsonder. */}
+            <div className='mt-3 mr-1.5 mb-10 min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-color:color-mix(in_srgb,var(--color-lavender)_45%,transparent)_transparent] [scrollbar-width:thin]'>
+                <div className='relative flex flex-col gap-5 px-6 pt-4 sm:px-9 sm:pt-6'>
+                    <button
+                        type='button'
+                        onClick={onClose}
+                        aria-label={t(dialogs.close)}
+                        // Sticky: bij een lange tekst (privacyverklaring) blijft de knop in beeld. De negatieve marge haalt zijn ruimte weg, zodat de inhoud ernaast begint.
+                        className='sticky top-3 z-10 -mt-2 -mr-2 -mb-[3.75rem] flex size-11 shrink-0 cursor-pointer items-center justify-center self-end rounded-full border-2 border-pink bg-royal-purple text-pink transition-colors hover:bg-pink/14 sm:-mt-4 sm:-mr-4'
+                    >
+                        <Icon name='close' size={22} />
+                    </button>
+                    {children}
+                </div>
             </div>
         </dialog>
     );

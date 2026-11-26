@@ -54,6 +54,18 @@ De site draait op <https://expedition-games.com>, als Cloudflare Worker met stat
 - **Schermen**: `src/Components/Screens/`, de app-schermen uit UpNext.Onepager nagebouwd in Tailwind op 390 × 844 (`Parts/` voor ScreenCanvas, PinkFooter, HeroCard, RowCard, YellowPill, ...). Iconen: Material Design Icons via `@mdi/js`, net als de app.
 - **Kleuren en fonts**: `src/index.css` (`@theme`), gelijk aan `src/colors.ts` in de Client.
 
+### Deelafbeelding
+
+Deel je de link (WhatsApp, iMessage, LinkedIn, ...), dan toont de app `public/og-image.png` (1200 × 630), met de titel en beschrijving uit de `og:`-tags in `index.html`. De bron is `og/og-image.html`: dezelfde achtergrond, het logo (`public/logo.svg`) en de fonts van de site.
+
+Na een wijziging (bijvoorbeeld de store-links in plaats van "Coming soon"): pas `og/og-image.html` aan, controleer hem in de browser, en maak de PNG opnieuw met Edge, vanuit de repo-root in PowerShell:
+
+```powershell
+& "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe" --headless=new --user-data-dir="$env:TEMP\og-edge" --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 --virtual-time-budget=3000 --screenshot="$PWD\public\og-image.png" "$PWD\og\og-image.html"
+```
+
+Houd hem onder 300 kB: grotere afbeeldingen laat WhatsApp soms weg. Apps bewaren de preview van een link een tijd; een al gedeelde link ververst dus niet meteen. Controleren kan met de [Sharing Debugger van Facebook](https://developers.facebook.com/tools/debug/) (ook voor WhatsApp; met "Scrape Again" ververs je hem daar).
+
 ## Hoe de animatie werkt
 
 `src/Components/Showcase/ScrollShowcase.tsx` bouwt één GSAP-timeline met ScrollTrigger (`pin` + `scrub`): de scrollpositie bepaalt hoe ver de timeline is, dus terugscrollen speelt alles terug. De pagina scrollt gewoon native; er wordt niets gekaapt of gesnapt.

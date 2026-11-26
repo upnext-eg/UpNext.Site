@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- Bron van public/og-image.png, de afbeelding bij een gedeelde link. Opnieuw maken: zie README, "Deelafbeelding". -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+            @font-face {
+                font-family: 'Anton';
+                font-weight: 400;
+                src: url('../node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2') format('woff2');
+            }
+            @font-face {
+                font-family: 'Manrope';
+                font-weight: 800;
+                src: url('../node_modules/@fontsource/manrope/files/manrope-latin-800-normal.woff2') format('woff2');
+            }
+
+            html,
+            body {
+                margin: 0;
+                width: 1200px;
+                height: 630px;
+                overflow: hidden;
+            }
+
+            /* dezelfde achtergrond als de site (src/index.css) */
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 64px;
+                background-color: #4414c6;
+                background-image:
+                    radial-gradient(90% 60% at 100% 0%, #6a2bf0 0%, transparent 70%),
+                    linear-gradient(180deg, #4a14d4 0%, #4414c6 100%);
+                color: #ffffff;
+                font-family: 'Manrope', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .logo {
+                width: 360px;
+                height: 360px;
+                filter: drop-shadow(0 24px 40px rgba(15, 0, 70, 0.45));
+            }
+
+            .text {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                margin: 0;
+                font-family: 'Anton', sans-serif;
+                font-weight: 400;
+                font-size: 168px;
+                line-height: 1;
+                letter-spacing: 1px;
+                text-shadow: 0 6px 0 #2a0a80;
+            }
+
+            p {
+                margin: 18px 0 0;
+                font-size: 38px;
+                font-weight: 800;
+                line-height: 1.2;
+                color: #d9c8ff;
+            }
+
+            .launch {
+                margin-top: 32px;
+                padding: 12px 28px;
+                border-radius: 999px;
+                background: #fff21a;
+                color: #2a0a80;
+                font-size: 30px;
+                font-weight: 800;
+            }
+        </style>
+    </head>
+    <body>
+        <img class="logo" src="../public/logo.svg" alt="" />
+        <div class="text">
+            <h1>UPNEXT</h1>
+            <p>The group game that<br />runs all night</p>
+            <div class="launch">Coming soon · Q1 2027</div>
+        </div>
+    </body>
+</html>

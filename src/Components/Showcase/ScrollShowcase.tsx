@@ -292,7 +292,7 @@ export default function ScrollShowcase(props: IProps) {
                     // "UP NEXT!" verschijnt erachter, de melding valt binnen en de telefoon schudt.
                     const shakeAt = at + timing.travel * 0.85 + 0.2;
                     timeline
-                        .set(flood, { x: () => arrival(next).x }, at)
+                        .set([flood, word], { x: () => arrival(next).x }, at)
                         .to(flood, { scale: 1, duration: 0.6, ease: 'power2.in' }, at + 0.1)
                         .to(word, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' }, at + 0.35)
                         .to(
@@ -382,59 +382,62 @@ export default function ScrollShowcase(props: IProps) {
             <div
                 ref={stageRef}
                 style={stageStyle}
-                className='relative h-svh overflow-hidden [--page-pad:clamp(1.5rem,5vw,5rem)] [--phone-h:clamp(220px,calc(100svh-24.5rem),600px)] [--phone-w:calc(var(--phone-h)*0.48)] [--text-area:18rem] [--text-gap:clamp(1.5rem,4vw,4rem)] wide:[--phone-h:min(74svh,720px)]'
+                className='relative h-lvh overflow-hidden [--page-pad:clamp(1.5rem,5vw,5rem)] [--phone-h:clamp(220px,calc(100svh-24.5rem),600px)] [--phone-w:calc(var(--phone-h)*0.48)] [--text-area:18rem] [--text-gap:clamp(1.5rem,4vw,4rem)] wide:[--phone-h:min(74svh,720px)]'
             >
                 {/* Het UP NEXT-moment: een gele cirkel die vanuit de telefoon het hele beeld vult, met "UP NEXT!" erachter. Alleen scale en opacity. */}
                 <div aria-hidden='true' className='pointer-events-none absolute inset-0 overflow-hidden'>
                     <div
                         ref={floodRef}
-                        className='absolute top-[calc(4.5rem+(100%-4.5rem-var(--text-area))/2)] left-1/2 size-[300vmax] rounded-full bg-yellow will-change-transform wide:top-1/2'
+                        className='absolute top-[calc(4.5rem+(100svh-4.5rem-var(--text-area))/2)] left-1/2 size-[300vmax] rounded-full bg-yellow will-change-transform wide:top-[50svh]'
                     />
-                    {/* Mobiel op één regel in de gele strook onderaan, niet achter de telefoon. */}
+                    {/* Achter de telefoon, niet achter de tekst, en toon-op-toon licht: een vol indigo woord eronder maakt de stapteksten lastig leesbaar. */}
                     <div
                         ref={wordRef}
-                        className='font-display absolute top-[calc(100%-13vw)] left-1/2 text-[24vw] leading-[0.86] whitespace-nowrap text-indigo/14 uppercase will-change-transform wide:top-1/2'
+                        className='font-display absolute top-[calc(4.5rem+(100svh-4.5rem-var(--text-area))/2)] left-1/2 text-[24vw] leading-[0.86] whitespace-nowrap text-indigo/7 uppercase will-change-transform wide:top-[50svh]'
                     >
                         Up next!
                     </div>
                 </div>
-                {/* Op een smal scherm een eigen vak boven de tekst: ingezoomd valt de telefoon daar zacht weg in plaats van over de tekst. */}
-                <div className='absolute inset-x-0 top-[4.5rem] bottom-(--text-area) [mask-image:linear-gradient(to_bottom,transparent,black_1rem,black_calc(100%-2.5rem),transparent)] wide:inset-0 wide:[mask-image:none]'>
-                    <div
-                        ref={floatRef}
-                        className='absolute inset-0 flex items-center justify-center perspective-[1600px]'
-                    >
-                        <div ref={moveRef} className='transform-3d'>
-                            <div ref={tiltRef} style={phoneRenderStyle} className='transform-3d'>
-                                <PhoneMockup
-                                    ref={phoneRef}
-                                    overlay={steps.map(
-                                        (step) =>
-                                            step.callout && (
-                                                <PhoneCallout key={step.id} id={step.callout} stepId={step.id} />
-                                            ),
-                                    )}
-                                >
-                                    {steps.map((step) => (
-                                        <div key={step.id} data-screen className='absolute inset-0'>
-                                            <PhoneScreen step={step} />
-                                        </div>
-                                    ))}
-                                </PhoneMockup>
+                {/* De inhoud blijft binnen de kleinste schermhoogte (svh): met de browserbalken uitgeklapt valt er niets achter. Is het scherm hoger, dan loopt alleen de achtergrond door. */}
+                <div className='absolute inset-x-0 top-0 h-svh'>
+                    {/* Op een smal scherm een eigen vak boven de tekst: ingezoomd valt de telefoon daar zacht weg in plaats van over de tekst. */}
+                    <div className='absolute inset-x-0 top-[4.5rem] bottom-(--text-area) [mask-image:linear-gradient(to_bottom,transparent,black_1rem,black_calc(100%-2.5rem),transparent)] wide:inset-0 wide:[mask-image:none]'>
+                        <div
+                            ref={floatRef}
+                            className='absolute inset-0 flex items-center justify-center perspective-[1600px]'
+                        >
+                            <div ref={moveRef} className='transform-3d'>
+                                <div ref={tiltRef} style={phoneRenderStyle} className='transform-3d'>
+                                    <PhoneMockup
+                                        ref={phoneRef}
+                                        overlay={steps.map(
+                                            (step) =>
+                                                step.callout && (
+                                                    <PhoneCallout key={step.id} id={step.callout} stepId={step.id} />
+                                                ),
+                                        )}
+                                    >
+                                        {steps.map((step) => (
+                                            <div key={step.id} data-screen className='absolute inset-0'>
+                                                <PhoneScreen step={step} />
+                                            </div>
+                                        ))}
+                                    </PhoneMockup>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {steps.map((step, index) => (
+                        <StepText
+                            key={step.id}
+                            step={step}
+                            index={index}
+                            variant={step.phone === 'center' ? 'split' : 'side'}
+                            className={textClasses[step.phone]}
+                        />
+                    ))}
+                    <OutroText className={textClasses.center} />
                 </div>
-                {steps.map((step, index) => (
-                    <StepText
-                        key={step.id}
-                        step={step}
-                        index={index}
-                        variant={step.phone === 'center' ? 'split' : 'side'}
-                        className={textClasses[step.phone]}
-                    />
-                ))}
-                <OutroText className={textClasses.center} />
             </div>
         </section>
     );

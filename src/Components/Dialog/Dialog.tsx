@@ -56,8 +56,10 @@ export default function Dialog(props: IProps) {
             }}
             className='bg-app inset-0 m-auto h-fit max-h-[calc(100dvh-2rem)] w-[min(30rem,calc(100%-2rem))] max-w-none flex-col overflow-hidden rounded-[24px_24px_64px_24px] border border-white/10 p-0 text-white shadow-[0_30px_80px] shadow-midnight/60 backdrop:bg-midnight/75 open:flex motion-safe:open:animate-dialog-in'
         >
-            {/* Het scrollvak ligt een eindje binnen de rand, met een dunne lavendel balk: zo valt de scrollbalk binnen de ronde hoeken en de staart rechtsonder. */}
-            <div className='mt-3 mr-1.5 mb-10 min-h-0 flex-1 overflow-y-auto overscroll-contain [scrollbar-color:color-mix(in_srgb,var(--color-lavender)_45%,transparent)_transparent] [scrollbar-width:thin]'>
+            {/* Het scrollvak ligt een eindje binnen de rand, met een dunne lavendel balk: zo valt de scrollbalk binnen de ronde hoeken en de staart rechtsonder.
+                flex-auto, niet flex-1: met basis 0 rekent Safari de hoogte van de popup (h-fit) uit als 0 en klapt de kaart in tot alleen de marges.
+                Met basis auto is het vak zo hoog als de inhoud, en krimpt het (min-h-0) pas als de popup tegen max-h aanloopt. */}
+            <div className='mt-3 mr-1.5 mb-10 min-h-0 flex-auto overflow-y-auto overscroll-contain [scrollbar-color:color-mix(in_srgb,var(--color-lavender)_45%,transparent)_transparent] [scrollbar-width:thin]'>
                 <div className='relative flex flex-col gap-5 px-6 pt-4 sm:px-9 sm:pt-6'>
                     <button
                         type='button'

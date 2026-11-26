@@ -1,5 +1,5 @@
 import CallToAction from 'src/Components/CallToAction/CallToAction';
-import PageScrollbar from 'src/Components/PageScrollbar/PageScrollbar';
+import Scrollbar from 'src/Components/Scrollbar/Scrollbar';
 import Showcase from 'src/Components/Showcase/Showcase';
 import SiteHeader from 'src/Components/SiteHeader/SiteHeader';
 import SkipLink from 'src/Components/SkipLink/SkipLink';
@@ -15,7 +15,7 @@ export default function App() {
                 {/* Met de footer erin: de roze boog onderaan draagt de store-knoppen en de footer. */}
                 <CallToAction />
             </main>
-            <PageScrollbar />
+            <Scrollbar className='fixed top-1 right-1 bottom-1 z-[55]' isToneAware />
         </div>
     );
 }

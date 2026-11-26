@@ -12,6 +12,7 @@ import { gsap, ScrollTrigger, useGSAP } from 'src/Logic/gsap';
 import { arrivalPose, focusPose, offsetMax, offsetRatio, poseVars, renderScale, wideQuery } from './showcaseMotion';
 import type { Measure } from './showcaseMotion';
 import OutroText from './OutroText';
+import ScrollHint from './ScrollHint';
 import StepText from './StepText';
 
 // Scrollafstand per tijdseenheid van de timeline, in schermhoogtes (een gewone stap is 1,7 eenheden: 0,85 schermhoogte).
@@ -117,6 +118,7 @@ export default function ScrollShowcase(props: IProps) {
             gsap.set(gsap.utils.toArray<HTMLElement>('[data-callout]', stage), { autoAlpha: 0, y: -40 });
             texts.slice(1).forEach((_text, offset) => gsap.set(partsOf(offset + 1), { opacity: 0, y: 24 }));
             const outroParts = stage.querySelectorAll('[data-outro] [data-text-part]');
+            const scrollHint = stage.querySelector('[data-scroll-hint]');
             gsap.set(outroParts, { opacity: 0, y: 24 });
             steps.forEach((step, index) => step.isUpNextMoment && gsap.set(partsOf(index), { clipPath: wipeShown }));
             // Centreren via GSAP: een CSS-translate zou GSAP één keer in pixels uitlezen.
@@ -148,6 +150,11 @@ export default function ScrollShowcase(props: IProps) {
                     rotationZ: opening.rotationZ,
                 })
                 .to({}, { duration: timing.hold * 0.6 });
+
+            // De scroll-hint verdwijnt zodra je begint te scrollen, en komt terug als je weer helemaal bovenaan bent.
+            if (scrollHint) {
+                timeline.to(scrollHint, { autoAlpha: 0, y: 8, duration: 0.2, ease: 'power1.in' }, 0.02);
+            }
 
             steps.slice(1).forEach((step, offset) => {
                 const previous = offset;
@@ -437,6 +444,7 @@ export default function ScrollShowcase(props: IProps) {
                         />
                     ))}
                     <OutroText className={textClasses.center} />
+                    <ScrollHint />
                 </div>
             </div>
         </section>

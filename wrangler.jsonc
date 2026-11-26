@@ -1,0 +1,27 @@
+// De Worker `upnext-site` op Cloudflare: serveert dist/ en handelt /api/* af (wachtlijst en klik-tellers in D1).
+// Eenmalig opzetten (database aanmaken en het id hieronder invullen): zie README, "Wachtlijst en tellers".
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "name": "upnext-site",
+    "main": "worker/index.ts",
+    "compatibility_date": "2026-11-01",
+    "assets": {
+        "directory": "./dist",
+        "binding": "ASSETS",
+        // Alleen de API gaat langs de Worker; de rest komt rechtstreeks uit dist/ (met public/_headers).
+        "run_worker_first": ["/api/*"],
+    },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "upnext-site",
+            "database_id": "0beee78c-f0db-462c-bef9-e171fc945ea4",
+            "migrations_dir": "migrations",
+        },
+    ],
+    // Per IP-adres per minuut (het adres wordt alleen als sleutel gebruikt, niet opgeslagen). namespace_id is een vrij te kiezen getal per limiter.
+    "ratelimits": [
+        { "name": "WAITLIST_LIMITER", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } },
+        { "name": "CLICKS_LIMITER", "namespace_id": "1002", "simple": { "limit": 30, "period": 60 } },
+    ],
+}

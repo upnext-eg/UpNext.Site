@@ -38,16 +38,16 @@ export const happyFlow: FlowStep[] = [
     {
         id: 'intro',
         phone: 'center',
-        screen: 'home',
+        screen: 'yourTurn',
         alt: {
-            en: 'The UpNext home screen: no group yet, with a button to create one.',
-            nl: 'Het startscherm van UpNext: nog geen groep, met een knop om er een te maken.',
+            en: 'UpNext in a live session: UP NEXT! It’s your turn, open your challenge within 4:32.',
+            nl: 'UpNext tijdens een sessie: UP NEXT! Jij bent aan de beurt, open je opdracht binnen 4:32.',
         },
         title: { en: 'Who’s', nl: 'Wie is er' },
         titleAccent: { en: 'UpNext?', nl: 'UpNext?' },
         description: {
-            en: 'One surprise group game that runs all night. Start a session, put your phone away and wait for the ping.',
-            nl: 'Eén onverwacht groepsspel dat de hele avond doorgaat. Start een sessie, leg je telefoon weg en wacht op de melding.',
+            en: 'Play one surprise group game all night long. Start a session, put your phone away and wait for the ping.',
+            nl: 'Speel de hele avond één onverwacht groepsspel. Start een sessie, leg je telefoon weg en wacht op de melding.',
         },
     },
     {
@@ -76,8 +76,8 @@ export const happyFlow: FlowStep[] = [
         },
         title: { en: 'Start the session', nl: 'Start de sessie' },
         description: {
-            en: 'The whole group or just your bestie: you pick who’s in tonight. One tap and the game is on.',
-            nl: 'Met de hele groep of alleen met je bestie: jij kiest wie er vanavond meedoet. Eén tik en het spel loopt.',
+            en: 'Play with the whole group or just your bestie: you pick who’s in tonight. Tap start and the game is on.',
+            nl: 'Speel met de hele groep of alleen met je bestie: jij kiest wie er vanavond meedoet. Tik op start en het spel loopt.',
         },
     },
     {
@@ -123,8 +123,8 @@ export const happyFlow: FlowStep[] = [
         },
         title: { en: 'Open your challenge', nl: 'Open je opdracht' },
         description: {
-            en: 'A dance, a dare, a photo you’ll want to see tomorrow. The clock only starts once you open it.',
-            nl: 'Een dansje, een durfopdracht, een foto die je morgen nog wilt zien. De klok loopt pas als je opent.',
+            en: 'Dance, take on a dare or shoot a photo you’ll want to see tomorrow. The clock only starts once you open it.',
+            nl: 'Doe een dansje, ga een durfopdracht aan of maak een foto die je morgen nog wilt zien. De klok loopt pas als je de opdracht opent.',
         },
     },
     {
@@ -137,8 +137,8 @@ export const happyFlow: FlowStep[] = [
         },
         title: { en: 'Show it', nl: 'Laat het zien' },
         description: {
-            en: 'Shoot a photo or video in the app, pick one from your gallery or type your answer. Send it, phone back in your pocket.',
-            nl: 'Maak een foto of video in de app, kies er een uit je galerij of typ je antwoord. Insturen, telefoon weer weg.',
+            en: 'Shoot a photo or video in the app, pick one from your gallery or type your answer. Send it in and put your phone away again.',
+            nl: 'Maak een foto of video in de app, kies er een uit je galerij of typ je antwoord. Stuur het in en leg je telefoon weer weg.',
         },
     },
     {

@@ -17,7 +17,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "paths": { "src/*": ["./src/*"] }
+    "paths": { "src/*": ["./src/*"], "shared/*": ["./shared/*"] }
   },
-  "include": ["src"]
+  "include": ["src", "shared"]
 }

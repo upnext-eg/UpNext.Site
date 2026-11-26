@@ -4,4 +4,3 @@ dist/
 .env*.local
 npm-debug.*
 .DS_Store
-

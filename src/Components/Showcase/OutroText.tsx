@@ -1,5 +1,6 @@
 import Icon from 'src/Components/Icon/Icon';
-import { callToAction, outro, storeLinks } from 'src/Content/site';
+import StoreAction from 'src/Components/StoreAction/StoreAction';
+import { callToAction, outro } from 'src/Content/site';
 import { useLanguage } from 'src/Hooks/useLanguage';
 
 interface IProps {
@@ -7,7 +8,7 @@ interface IProps {
 }
 
 const pill =
-    'inline-flex min-h-11 items-center rounded-full border-2 border-pink px-5 text-[0.9375rem] font-extrabold whitespace-nowrap text-white';
+    'inline-flex min-h-11 items-center rounded-full border-2 border-pink px-5 text-[0.9375rem] font-extrabold whitespace-nowrap text-white transition-colors hover:bg-pink/14';
 
 // Het slot van de showcase, naar de banner in Designs/: links het app-icoon, UPNEXT, "Coming soon" en de stores; rechts de roze kaart met Q1 2027.
 // Op een breed scherm staat de telefoon er in het midden tussen.
@@ -17,9 +18,9 @@ export default function OutroText(props: IProps) {
     const { t } = useLanguage();
 
     const stores = [
-        { name: callToAction.appStore.name, href: storeLinks.appStore },
-        { name: callToAction.googlePlay.name, href: storeLinks.googlePlay },
-    ];
+        { store: 'appStore', name: callToAction.appStore.name },
+        { store: 'googlePlay', name: callToAction.googlePlay.name },
+    ] as const;
 
     return (
         <div data-outro className={className}>
@@ -41,33 +42,22 @@ export default function OutroText(props: IProps) {
                 </div>
                 <p className='text-base text-lavender wide:text-[clamp(1.0625rem,1.5vw,1.5rem)]'>{t(outro.subtitle)}</p>
                 <div className='flex gap-3'>
-                    {stores.map((store) =>
-                        store.href ? (
-                            <a
-                                key={store.name}
-                                href={store.href}
-                                className={`${pill} transition-colors hover:bg-pink/14`}
-                            >
-                                {store.name}
-                            </a>
-                        ) : (
-                            <span key={store.name} aria-disabled='true' className={pill}>
-                                {store.name}
-                            </span>
-                        ),
-                    )}
+                    {stores.map((item) => (
+                        <StoreAction key={item.store} store={item.store} source='outro' className={pill}>
+                            {item.name}
+                        </StoreAction>
+                    ))}
                 </div>
             </div>
             <div data-text-part className='wide:col-start-3 wide:row-start-1 wide:justify-self-start'>
-                <div className='rounded-card-shape bg-hero-card shadow-card relative flex items-end gap-2 overflow-hidden py-2 pr-8 pl-5 text-purple wide:gap-4 wide:py-5 wide:pr-16 wide:pl-9'>
+                {/* Verhoudingen nagemeten op de banner in Designs/: alle maten in em, zodat de kaart op elk formaat dezelfde vorm houdt. */}
+                <div className='bg-hero-card shadow-card font-display relative flex items-end gap-[0.1em] overflow-hidden rounded-[0.26em_0.26em_0.61em_0.26em] py-[0.19em] pr-[0.42em] pl-[0.29em] text-[2.75rem] leading-none text-purple wide:text-[clamp(3rem,5.5vw,6rem)]'>
                     <span
                         aria-hidden='true'
-                        className='absolute top-0 right-0 size-10 bg-yellow [clip-path:polygon(0_0,100%_0,100%_100%)] wide:size-20'
+                        className='absolute top-0 right-0 size-[0.79em] bg-yellow [clip-path:polygon(0_0,100%_0,100%_100%)]'
                     />
-                    <span className='font-display text-[2rem] leading-none whitespace-nowrap uppercase wide:text-[clamp(3rem,5.5vw,6rem)]'>
-                        {outro.launch}
-                    </span>
-                    <Icon name='arrow-top-right' size={28} className='mb-1 wide:mb-2' />
+                    <span className='whitespace-nowrap uppercase'>{outro.launch}</span>
+                    <Icon name='arrow-top-right' size={24} className='mb-[0.04em] size-[0.4em]' />
                 </div>
             </div>
         </div>

@@ -2,6 +2,7 @@ import BrandMark from 'src/Components/BrandMark/BrandMark';
 import LanguageToggle from 'src/Components/LanguageToggle/LanguageToggle';
 import { header } from 'src/Content/site';
 import { useLanguage } from 'src/Hooks/useLanguage';
+import { trackClick } from 'src/Logic/Api/siteApi';
 
 // Vaste effen paarse balk, zoals in UpNext.Onepager: merk links, taal en Download rechts (ook op mobiel: daar installeert een bezoeker de app).
 export default function SiteHeader() {
@@ -16,6 +17,7 @@ export default function SiteHeader() {
                 <LanguageToggle />
                 <a
                     href='#download'
+                    onClick={() => trackClick('download', 'header')}
                     className='shadow-button inline-flex min-h-11 items-center rounded-full bg-yellow px-3.5 text-[0.9375rem] font-extrabold text-indigo transition-transform hover:-translate-y-0.5 sm:px-[18px]'
                 >
                     {t(header.download)}

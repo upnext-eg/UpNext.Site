@@ -32,6 +32,27 @@
     --radius-field: 16px;
     --radius-card: 20px;
     --radius-card-tail: 50px;
+
+    /* Popup: komt binnen met een rustige uitloop (alleen met motion-safe). */
+    --animate-dialog-in: dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    --animate-scroll-hint: scroll-hint 1.8s ease-in-out infinite;
+
+    @keyframes dialog-in {
+        from {
+            opacity: 0;
+            transform: translateY(16px) scale(0.98);
+        }
+    }
+
+    @keyframes scroll-hint {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(5px);
+        }
+    }
 }
 
 /* Breed genoeg om telefoon en tekst naast elkaar te zetten. Tablet staand valt erbuiten: daar staat de tekst onder de telefoon. */
@@ -69,6 +90,13 @@
 
     html {
         scrollbar-color: var(--color-violet) var(--color-royal-purple);
+        /* Ruimte voor de scrollbalk vasthouden: zo verspringt de pagina niet als een popup de scroll vergrendelt. */
+        scrollbar-gutter: stable;
+    }
+
+    /* Met een popup open scrolt de pagina erachter niet mee (anders speelt de showcase door). */
+    html:has(dialog[open]) {
+        overflow: hidden;
     }
 
     /* Roze ring op paars, zoals in UpNext.Onepager; op roze vlakken zet een component hem op indigo. */

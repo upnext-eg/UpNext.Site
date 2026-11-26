@@ -1,15 +1,19 @@
 import BrandMark from 'src/Components/BrandMark/BrandMark';
 import LanguageToggle from 'src/Components/LanguageToggle/LanguageToggle';
-import { footer, storeLinks } from 'src/Content/site';
+import StoreAction from 'src/Components/StoreAction/StoreAction';
+import { footer } from 'src/Content/site';
+import { useDialogs } from 'src/Hooks/useDialogs';
 import { useLanguage } from 'src/Hooks/useLanguage';
+import { trackClick } from 'src/Logic/Api/siteApi';
 
 const linkStyle =
-    'inline-flex min-h-8 w-fit items-center text-[0.9375rem] font-semibold text-navy underline-offset-[3px] hover:underline focus-visible:outline-indigo focus-visible:outline-offset-2';
+    'inline-flex min-h-8 w-fit cursor-pointer items-center text-left text-[0.9375rem] font-semibold text-navy underline-offset-[3px] hover:underline focus-visible:outline-indigo focus-visible:outline-offset-2';
 const columnTitle = 'mb-1 text-sm font-extrabold text-indigo';
 
 // De footer uit UpNext.Onepager, onderaan in de roze boog van de call-to-action.
 export default function SiteFooter() {
     const { t } = useLanguage();
+    const { openPrivacy } = useDialogs();
 
     const { company } = footer;
     const hasContact = Boolean(company.name || company.email || company.kvk || company.privacyUrl);
@@ -27,20 +31,22 @@ export default function SiteFooter() {
                     <a href='#top' className={linkStyle}>
                         {t(footer.howItWorks)}
                     </a>
-                    <a href='#download' className={linkStyle}>
+                    <a href='#download' onClick={() => trackClick('download', 'footer')} className={linkStyle}>
                         {t(footer.download)}
                     </a>
+                    <button type='button' aria-haspopup='dialog' onClick={openPrivacy} className={linkStyle}>
+                        {t(footer.privacyLabel)}
+                    </button>
                 </nav>
 
                 <nav aria-label={t(footer.appTitle)} className='flex flex-col gap-2'>
                     <h3 className={columnTitle}>{t(footer.appTitle)}</h3>
-                    {/* Zolang de app niet in de store staat, gaan beide naar de downloadknoppen. */}
-                    <a href={storeLinks.appStore ?? '#download'} className={linkStyle}>
+                    <StoreAction store='appStore' source='footer' className={linkStyle}>
                         App Store
-                    </a>
-                    <a href={storeLinks.googlePlay ?? '#download'} className={linkStyle}>
+                    </StoreAction>
+                    <StoreAction store='googlePlay' source='footer' className={linkStyle}>
                         Google Play
-                    </a>
+                    </StoreAction>
                 </nav>
 
                 {hasContact && (

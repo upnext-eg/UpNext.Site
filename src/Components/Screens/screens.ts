@@ -3,7 +3,6 @@ import type { ComponentType } from 'react';
 import CameraScreen from './CameraScreen';
 import ChallengeScreen from './ChallengeScreen';
 import GroupCreatedScreen from './GroupCreatedScreen';
-import HomeScreen from './HomeScreen';
 import StartSessionScreen from './StartSessionScreen';
 import TimelineScreen from './TimelineScreen';
 import WaitingScreen from './WaitingScreen';
@@ -11,7 +10,6 @@ import YourTurnScreen from './YourTurnScreen';
 
 // De app-schermen uit UpNext.Onepager, op 390 × 844. Staat er een screenshot in happyFlow.ts, dan wint die.
 export const placeholderScreens = {
-    home: HomeScreen,
     groupCreated: GroupCreatedScreen,
     startSession: StartSessionScreen,
     waiting: WaitingScreen,

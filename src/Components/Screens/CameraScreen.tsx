@@ -40,6 +40,7 @@ export default function CameraScreen() {
                     <RoundButton icon='camera-flip-outline' />
                 </div>
             </div>
+            <span className='absolute bottom-[8px] left-1/2 h-[5px] w-[134px] -translate-x-1/2 rounded-full bg-white' />
         </div>
     );
 }

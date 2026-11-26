@@ -27,6 +27,8 @@ export const header = {
 };
 
 export const showcase = {
+    // Onderaan de opening, tot je begint te scrollen: niet iedereen ziet meteen dat de pagina een verhaal is om doorheen te scrollen.
+    scrollHint: { en: 'Scroll to play the night', nl: 'Scroll en speel de avond' } satisfies Localized,
     label: { en: 'How a night with UpNext goes', nl: 'Zo gaat een avond met UpNext' } satisfies Localized,
 };
 
@@ -72,7 +74,7 @@ export const footer = {
     appTitle: { en: 'The app', nl: 'De app' } satisfies Localized,
     contactTitle: { en: 'Contact', nl: 'Contact' } satisfies Localized,
     kvkLabel: { en: 'CoC', nl: 'KvK' } satisfies Localized,
-    privacyLabel: { en: 'Privacy policy', nl: 'Privacybeleid' } satisfies Localized,
+    privacyLabel: { en: 'Privacy statement', nl: 'Privacyverklaring' } satisfies Localized,
     // Vóór livegang invullen met gegevens van de eigenaar (launch-checklist). Lege velden worden niet getoond;
     // zolang alles leeg is, verschijnt de kolom Contact niet.
     company: {

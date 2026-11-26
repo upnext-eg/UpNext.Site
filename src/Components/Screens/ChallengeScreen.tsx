@@ -9,7 +9,6 @@ import { screenText } from './Parts/screenText';
 import YellowPill from './Parts/YellowPill';
 
 const text = {
-    label: { en: 'Your challenge', nl: 'Jouw opdracht' },
     type: { en: 'Dare', nl: 'Durf' },
     title: { en: 'Group photo with a stranger', nl: 'Groepsfoto met een vreemde' },
     body: {
@@ -41,7 +40,6 @@ export default function ChallengeScreen() {
                     <span className='font-display text-[22px] leading-none'>4:58</span>
                 </div>
             </div>
-            <span className={`${screenText.cardLabel} text-pink`}>{t(text.label)}</span>
             <div data-reveal>
                 <HeroCard>
                     <span className='self-start rounded-full border-[1.5px] border-indigo px-[10px] py-[4px] text-[11px] leading-[1.4] font-extrabold tracking-[0.5px] text-indigo uppercase'>

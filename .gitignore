@@ -2,6 +2,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 .env*.local
+.wrangler/
 npm-debug.*
 .DS_Store
 

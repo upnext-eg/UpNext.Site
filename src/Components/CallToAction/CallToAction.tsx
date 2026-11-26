@@ -36,13 +36,15 @@ export default function CallToAction() {
             <div className='bg-pink-footer shadow-footer rounded-t-[50%_clamp(28px,6vw,96px)] px-5 pt-[clamp(40px,4.5vw,64px)] text-indigo'>
                 <div className='flex flex-wrap justify-center gap-4 max-sm:mx-auto max-sm:max-w-[340px] max-sm:flex-col'>
                     <StoreButton
-                        href={storeLinks.appStore}
+                        store='appStore'
+                        source='cta'
                         overline={t(storeLinks.appStore ? appStore.overline : appStore.comingSoon)}
                         name={appStore.name}
                         icon='apple'
                     />
                     <StoreButton
-                        href={storeLinks.googlePlay}
+                        store='googlePlay'
+                        source='cta'
                         overline={t(storeLinks.googlePlay ? googlePlay.overline : googlePlay.comingSoon)}
                         name={googlePlay.name}
                         icon='google-play'

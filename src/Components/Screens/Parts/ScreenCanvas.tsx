@@ -25,6 +25,8 @@ export default function ScreenCanvas(props: IProps) {
             </div>
             <div className='flex min-h-0 grow flex-col gap-[16px] px-[24px] pt-[8px]'>{children}</div>
             {footer}
+            {/* De home-indicator van iOS, onderaan over de footer heen. */}
+            <span className='absolute bottom-[8px] left-1/2 z-[2] h-[5px] w-[134px] -translate-x-1/2 rounded-full bg-midnight' />
         </div>
     );
 }

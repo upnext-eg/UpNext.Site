@@ -1,5 +1,7 @@
 import { useLanguage } from 'src/Hooks/useLanguage';
 
+import { groupName } from './Parts/groupName';
+
 import MediaTile from './Parts/MediaTile';
 import PinkFooter from './Parts/PinkFooter';
 import PlayersPill from './Parts/PlayersPill';
@@ -34,7 +36,7 @@ export default function TimelineScreen() {
                 </PinkFooter>
             }
         >
-            <SessionHeader liveLabel={t(text.live)} title='Jullie clubje' />
+            <SessionHeader liveLabel={t(text.live)} title={t(groupName)} />
             <span className={screenText.heading}>{t(text.timeline)}</span>
             <div data-reveal>
                 <RowCard>

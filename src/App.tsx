@@ -1,4 +1,5 @@
 import CallToAction from 'src/Components/CallToAction/CallToAction';
+import PageScrollbar from 'src/Components/PageScrollbar/PageScrollbar';
 import Showcase from 'src/Components/Showcase/Showcase';
 import SiteHeader from 'src/Components/SiteHeader/SiteHeader';
 import SkipLink from 'src/Components/SkipLink/SkipLink';
@@ -14,6 +15,7 @@ export default function App() {
                 {/* Met de footer erin: de roze boog onderaan draagt de store-knoppen en de footer. */}
                 <CallToAction />
             </main>
+            <PageScrollbar />
         </div>
     );
 }

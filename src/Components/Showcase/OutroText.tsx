@@ -1,14 +1,11 @@
 import Icon from 'src/Components/Icon/Icon';
-import StoreAction from 'src/Components/StoreAction/StoreAction';
+import StoreButton from 'src/Components/StoreButton/StoreButton';
 import { callToAction, outro } from 'src/Content/site';
 import { useLanguage } from 'src/Hooks/useLanguage';
 
 interface IProps {
     className?: string;
 }
-
-const pill =
-    'inline-flex min-h-11 items-center rounded-full border-2 border-pink px-5 text-[0.9375rem] font-extrabold whitespace-nowrap text-white transition-colors hover:bg-pink/14';
 
 // Het slot van de showcase, naar de banner in Designs/: links het app-icoon, UPNEXT, "Coming soon" en de stores; rechts de roze kaart met Q1 2027.
 // Op een breed scherm staat de telefoon er in het midden tussen.
@@ -17,9 +14,10 @@ export default function OutroText(props: IProps) {
 
     const { t } = useLanguage();
 
+    const { appStore, googlePlay } = callToAction;
     const stores = [
-        { store: 'appStore', name: callToAction.appStore.name },
-        { store: 'googlePlay', name: callToAction.googlePlay.name },
+        { store: 'appStore', icon: 'apple', ...appStore },
+        { store: 'googlePlay', icon: 'google-play', ...googlePlay },
     ] as const;
 
     return (
@@ -41,11 +39,18 @@ export default function OutroText(props: IProps) {
                     </h2>
                 </div>
                 <p className='text-base text-lavender wide:text-[clamp(1.0625rem,1.5vw,1.5rem)]'>{t(outro.subtitle)}</p>
-                <div className='flex gap-3'>
+                <div className='flex flex-wrap justify-center gap-2 wide:justify-end wide:gap-3'>
                     {stores.map((item) => (
-                        <StoreAction key={item.store} store={item.store} source='outro' className={pill}>
-                            {item.name}
-                        </StoreAction>
+                        <StoreButton
+                            key={item.store}
+                            store={item.store}
+                            source='outro'
+                            overline={t(item.overline)}
+                            name={item.name}
+                            icon={item.icon}
+                            tone='midnight'
+                            isCompact
+                        />
                     ))}
                 </div>
             </div>

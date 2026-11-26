@@ -36,6 +36,7 @@
     /* Popup: komt binnen met een rustige uitloop (alleen met motion-safe). */
     --animate-dialog-in: dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     --animate-scroll-hint: scroll-hint 1.8s ease-in-out infinite;
+    --animate-scroll-line: scroll-line 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
     @keyframes dialog-in {
         from {
@@ -51,6 +52,16 @@
         }
         50% {
             transform: translateY(5px);
+        }
+    }
+
+    /* Een streepje dat door een smal spoor naar beneden loopt. */
+    @keyframes scroll-line {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(200%);
         }
     }
 }
@@ -88,10 +99,13 @@
         color: var(--color-indigo);
     }
 
+    /* Geen gewone scrollbalk: PageScrollbar tekent een eigen dunne balk die van kleur wisselt met de achtergrond. Zonder balk verspringt de pagina ook niet als een popup de scroll vergrendelt. */
     html {
-        scrollbar-color: var(--color-violet) var(--color-royal-purple);
-        /* Ruimte voor de scrollbalk vasthouden: zo verspringt de pagina niet als een popup de scroll vergrendelt. */
-        scrollbar-gutter: stable;
+        scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar {
+        display: none;
     }
 
     /* Met een popup open scrolt de pagina erachter niet mee (anders speelt de showcase door). */

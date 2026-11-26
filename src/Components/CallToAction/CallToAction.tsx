@@ -1,6 +1,6 @@
 import SiteFooter from 'src/Components/SiteFooter/SiteFooter';
 import StoreButton from 'src/Components/StoreButton/StoreButton';
-import { callToAction, storeLinks } from 'src/Content/site';
+import { callToAction } from 'src/Content/site';
 import { useLanguage } from 'src/Hooks/useLanguage';
 
 // De slotsectie uit UpNext.Onepager: app-icoon, kop en uitleg op paars, daaronder de gebogen roze footer van de app op paginaformaat met de store-knoppen en de footer.
@@ -33,19 +33,22 @@ export default function CallToAction() {
                     {t(callToAction.body)}
                 </p>
             </div>
-            <div className='bg-pink-footer shadow-footer rounded-t-[50%_clamp(28px,6vw,96px)] px-5 pt-[clamp(40px,4.5vw,64px)] text-indigo'>
+            <div
+                data-surface='light'
+                className='bg-pink-footer shadow-footer rounded-t-[50%_clamp(28px,6vw,96px)] px-5 pt-[clamp(40px,4.5vw,64px)] text-indigo'
+            >
                 <div className='flex flex-wrap justify-center gap-4 max-sm:mx-auto max-sm:max-w-[340px] max-sm:flex-col'>
                     <StoreButton
                         store='appStore'
                         source='cta'
-                        overline={t(storeLinks.appStore ? appStore.overline : appStore.comingSoon)}
+                        overline={t(appStore.overline)}
                         name={appStore.name}
                         icon='apple'
                     />
                     <StoreButton
                         store='googlePlay'
                         source='cta'
-                        overline={t(storeLinks.googlePlay ? googlePlay.overline : googlePlay.comingSoon)}
+                        overline={t(googlePlay.overline)}
                         name={googlePlay.name}
                         icon='google-play'
                     />

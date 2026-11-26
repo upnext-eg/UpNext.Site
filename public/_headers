@@ -1,4 +1,4 @@
-# Headers voor Cloudflare Pages (komt via public/ in dist/). Zie README, "Deploy".
+# Headers voor de statische bestanden op Cloudflare (komt via public/ in dist/). Zie README, "Deploy".
 
 /*
   X-Content-Type-Options: nosniff

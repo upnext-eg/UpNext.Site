@@ -14,35 +14,34 @@ React + TypeScript + Vite, Tailwind CSS v4, GSAP (ScrollTrigger, `@gsap/react`).
 | `npm run lint` | eslint |
 | `npm run format` / `format:check` | prettier |
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers)
 
-De site draait op <https://expedition-games.com>, via Cloudflare Pages (niet op de VPS). `main` is altijd productie; er is geen `develop` en geen staging.
+De site draait op <https://expedition-games.com>, als Cloudflare Worker met statische bestanden (`upnext-site`, niet op de VPS). Er draait geen code op de Worker: hij serveert alleen `dist/`. `main` is altijd productie; er is geen `develop`, geen staging en geen preview.
 
 - **Branches**: `feature/*` → `main` via een PR, nooit direct naar `main` pushen. Kleine commits met een Engels subject in de gebiedende wijs.
 - **CI** (`.github/workflows/ci.yml`, GitHub Actions): lint, prettier en de build op elke PR en elke push naar `main`. Met branch protection kan een PR pas naar `main` als die groen is.
-- **Pages** bouwt zelf, los van de CI: elke push naar `main` gaat live, elke andere branch krijgt een eigen preview-URL (`<branch>.upnext-site.pages.dev`). Een preview is openbaar, net als de site.
-- **Node**: `.node-version`, voor Pages en de CI samen.
+- **Cloudflare** bouwt zelf (Workers Builds), los van de CI: elke push naar `main` draait `npm run build` en daarna `npx wrangler deploy`, en dan staat hij live. Andere branches bouwt Cloudflare niet; bekijk een wijziging lokaal met `npm run build` en `npm run preview`.
+- **Node**: `.node-version`, voor Cloudflare en de CI samen.
 - **Headers**: `public/_headers` (komt in `dist/`). Bestanden in `/assets/` hebben een hash in de naam en mogen een jaar in de cache; `index.html` niet, zodat een nieuwe versie meteen zichtbaar is.
-- **Terug naar een eerdere versie**: Workers & Pages → `upnext-site` → Deployments → bij de versie die je wilt: ⋯ → Rollback to this deployment. De volgende push naar `main` gaat er weer overheen.
+- **Terug naar een eerdere versie**: Workers & Pages → `upnext-site` → Deployments → bij de versie die je wilt: Rollback. De volgende push naar `main` gaat er weer overheen.
 
 ### Eenmalig opzetten
 
-1. **Pages-project**: Cloudflare → Workers & Pages → Create → Pages → Connect to Git. Geef de GitHub-app alleen toegang tot `UpNext.Site`. Instellingen:
+1. **Worker**: Cloudflare → Workers & Pages → Create → Import a repository. Geef de GitHub-app alleen toegang tot `UpNext.Site`. Instellingen:
 
     | | |
     |---|---|
-    | Project name | `upnext-site` |
-    | Production branch | `main` |
-    | Framework preset | None |
+    | Worker name | `upnext-site` |
     | Build command | `npm run build` |
-    | Build output directory | `dist` |
+    | Deploy command | `npx wrangler deploy` |
+    | Production branch | `main` |
 
-    Na de eerste build staat de site op `upnext-site.pages.dev`.
-
-2. **Domein**: in het project → Custom domains → `expedition-games.com`. Pages zet het DNS-record zelf. Staat er al een A- of CNAME-record op het kale domein, dan moet dat eerst weg (DNS → Records); laat MX en TXT staan (mail, SPF en DKIM van Brevo).
-3. **www**: voeg ook `www.expedition-games.com` toe als custom domain, en maak een redirect: Rules → Redirect Rules → template "Redirect from WWW to root" (301, pad en query blijven).
-4. **Branch protection** (GitHub → Settings → Branches → `main`): een PR verplicht, en de check `check` moet slagen.
-5. **Monitoring**: een uptime-monitor in Better Stack op `https://expedition-games.com`.
+2. **Geen previews**: Worker → Settings → Build → Branch control: builds voor andere branches dan `main` uit. Anders draait Cloudflare bij elke andere branch `npx wrangler preview`, en dat faalt zonder Wrangler-config.
+3. **Alleen het eigen domein**: Worker → Settings → Domains & Routes: zet `workers.dev` en Preview URLs uit, zodat de site alleen op `expedition-games.com` staat (met de redirects van stap 5).
+4. **Domein**: Domains & Routes → Add → Custom domain → `expedition-games.com`. Cloudflare zet het DNS-record zelf. Staat er al een A- of CNAME-record op het kale domein, dan moet dat eerst weg (DNS → Records); laat MX en TXT staan (mail, SPF en DKIM van Brevo).
+5. **www en https**: voeg ook `www.expedition-games.com` toe als custom domain, met een redirect: Rules → Redirect Rules, als `Hostname` gelijk is aan `www.expedition-games.com`, dan een Dynamic redirect naar `concat("https://expedition-games.com", http.request.uri.path)`, 301, met Preserve query string. En SSL/TLS → Edge Certificates → Always Use HTTPS aan.
+6. **Branch protection** (GitHub → Settings → Branches → `main`): een PR verplicht, en de check `check` moet slagen.
+7. **Monitoring**: een uptime-monitor in Better Stack op `https://expedition-games.com`.
 
 ## Inhoud aanpassen
 

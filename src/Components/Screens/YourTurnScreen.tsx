@@ -1,5 +1,7 @@
 import { useLanguage } from 'src/Hooks/useLanguage';
 
+import { groupName } from './Parts/groupName';
+
 import AppAvatar from './Parts/AppAvatar';
 import HeroCard from './Parts/HeroCard';
 import MediaTile from './Parts/MediaTile';
@@ -32,7 +34,7 @@ export default function YourTurnScreen() {
                 </PinkFooter>
             }
         >
-            <SessionHeader liveLabel={t(text.live)} title='Jullie clubje' />
+            <SessionHeader liveLabel={t(text.live)} title={t(groupName)} />
             <div data-reveal>
                 <HeroCard>
                     <span className={screenText.cardLabel}>{t(text.cardLabel)}</span>

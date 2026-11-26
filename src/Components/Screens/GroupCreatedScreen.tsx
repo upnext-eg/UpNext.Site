@@ -4,6 +4,7 @@ import { useLanguage } from 'src/Hooks/useLanguage';
 import AppAvatar from './Parts/AppAvatar';
 import type { AvatarTone } from './Parts/AppAvatar';
 import CircleIcon from './Parts/CircleIcon';
+import { groupName } from './Parts/groupName';
 import PinkFooter from './Parts/PinkFooter';
 import RowCard from './Parts/RowCard';
 import ScreenCanvas from './Parts/ScreenCanvas';
@@ -43,7 +44,7 @@ export default function GroupCreatedScreen() {
             }
         >
             <span className={screenText.brand}>{t(text.created)}</span>
-            <span className={`${screenText.display} -mt-[12px]`}>Jullie clubje</span>
+            <span className={`${screenText.display} -mt-[12px]`}>{t(groupName)}</span>
             <span className={screenText.body}>{t(text.body)}</span>
             <div data-reveal>
                 <RowCard>

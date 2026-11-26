@@ -8,6 +8,7 @@ import type { FlowStep, PhonePosition } from 'src/Content/happyFlow';
 import { showcase } from 'src/Content/site';
 import { useLanguage } from 'src/Hooks/useLanguage';
 import { gsap, ScrollTrigger, useGSAP } from 'src/Logic/gsap';
+import { surfaceToneAt } from 'src/Logic/Surface/surfaceTone';
 
 import { arrivalPose, focusPose, offsetMax, offsetRatio, poseVars, renderScale, wideQuery } from './showcaseMotion';
 import type { Measure } from './showcaseMotion';
@@ -29,6 +30,9 @@ const timing = {
     // Na de laatste stap: de telefoon schuift terug naar het midden, de banner verschijnt eromheen, daarna loopt de pagina door naar de call-to-action.
     outro: 2,
 };
+
+// Seconden stilstaan voordat de scroll-hint verschijnt: bij binnenkomst sneller, later pas als iemand echt blijft hangen.
+const hintDelay = { first: 1.2, idle: 2.5 };
 
 // Tekst op geel verdwijnt met een wipe naar boven: indigo dat over geel uitfadet, wordt modderig.
 const wipeShown = 'inset(0% 0% 0% 0%)';
@@ -118,8 +122,11 @@ export default function ScrollShowcase(props: IProps) {
             gsap.set(gsap.utils.toArray<HTMLElement>('[data-callout]', stage), { autoAlpha: 0, y: -40 });
             texts.slice(1).forEach((_text, offset) => gsap.set(partsOf(offset + 1), { opacity: 0, y: 24 }));
             const outroParts = stage.querySelectorAll('[data-outro] [data-text-part]');
-            const scrollHint = stage.querySelector('[data-scroll-hint]');
+            const scrollHint = stage.querySelector<HTMLElement>('[data-scroll-hint]');
             gsap.set(outroParts, { opacity: 0, y: 24 });
+            if (scrollHint) {
+                gsap.set(scrollHint, { autoAlpha: 0 });
+            }
             steps.forEach((step, index) => step.isUpNextMoment && gsap.set(partsOf(index), { clipPath: wipeShown }));
             // Centreren via GSAP: een CSS-translate zou GSAP één keer in pixels uitlezen.
             gsap.set([flood, word], { xPercent: -50, yPercent: -50 });
@@ -150,11 +157,6 @@ export default function ScrollShowcase(props: IProps) {
                     rotationZ: opening.rotationZ,
                 })
                 .to({}, { duration: timing.hold * 0.6 });
-
-            // De scroll-hint verdwijnt zodra je begint te scrollen, en komt terug als je weer helemaal bovenaan bent.
-            if (scrollHint) {
-                timeline.to(scrollHint, { autoAlpha: 0, y: 8, duration: 0.2, ease: 'power1.in' }, 0.02);
-            }
 
             steps.slice(1).forEach((step, offset) => {
                 const previous = offset;
@@ -299,7 +301,19 @@ export default function ScrollShowcase(props: IProps) {
                     // "UP NEXT!" verschijnt erachter, de melding valt binnen en de telefoon schudt.
                     const shakeAt = at + timing.travel * 0.85 + 0.2;
                     timeline
-                        .set([flood, word], { x: () => arrival(next).x }, at)
+                        .set(flood, { x: () => arrival(next).x }, at)
+                        // Het woord volgt de telefoon, maar niet verder dan de rand: staat de telefoon opzij (breed scherm), dan valt het anders half buiten beeld.
+                        .set(
+                            word,
+                            {
+                                x: () => {
+                                    const gutter = stage.clientWidth * 0.02;
+                                    const room = Math.max(0, (stage.clientWidth - word.offsetWidth) / 2 - gutter);
+                                    return gsap.utils.clamp(-room, room, arrival(next).x);
+                                },
+                            },
+                            at,
+                        )
                         .to(flood, { scale: 1, duration: 0.6, ease: 'power2.in' }, at + 0.1)
                         .to(word, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' }, at + 0.35)
                         .to(
@@ -371,10 +385,45 @@ export default function ScrollShowcase(props: IProps) {
                 removePointer = () => window.removeEventListener('pointermove', onPointerMove);
             }
 
+            // De scroll-hint aan de zijkant: sta je stil in de showcase, dan verschijnt hij na een paar tellen (de eerste keer sneller), en bij scrollen is hij meteen weg.
+            // Niet meer in het slot: daar staat de banner en loopt de pagina zichtbaar door.
+            let removeHint: (() => void) | undefined;
+            if (contextSafe && scrollHint) {
+                const showHint = contextSafe(() => {
+                    const trigger = timeline.scrollTrigger;
+                    if (!trigger?.isActive || trigger.progress > outroAt / timeline.duration()) {
+                        return;
+                    }
+                    const box = scrollHint.getBoundingClientRect();
+                    scrollHint.dataset.tone = surfaceToneAt(box.left + box.width / 2, box.top + box.height / 2);
+                    gsap.fromTo(
+                        scrollHint,
+                        { autoAlpha: 0, x: 8 },
+                        { autoAlpha: 1, x: 0, duration: 0.6, ease: arrive, overwrite: true },
+                    );
+                });
+                let idleHint = gsap.delayedCall(hintDelay.first, showHint);
+                const onScroll = contextSafe(() => {
+                    if (Number(gsap.getProperty(scrollHint, 'opacity')) > 0) {
+                        gsap.to(scrollHint, { autoAlpha: 0, duration: 0.2, overwrite: true });
+                    }
+                    idleHint.kill();
+                    idleHint = gsap.delayedCall(hintDelay.idle, showHint);
+                });
+                window.addEventListener('scroll', onScroll, { passive: true });
+                removeHint = () => {
+                    window.removeEventListener('scroll', onScroll);
+                    idleHint.kill();
+                };
+            }
+
             // Anton en Manrope veranderen de tekstmaten als ze binnen zijn: daarna opnieuw meten.
             document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-            return () => removePointer?.();
+            return () => {
+                removePointer?.();
+                removeHint?.();
+            };
         },
         { scope: sectionRef, dependencies: [steps] },
     );
@@ -395,6 +444,7 @@ export default function ScrollShowcase(props: IProps) {
                 <div aria-hidden='true' className='pointer-events-none absolute inset-0 overflow-hidden'>
                     <div
                         ref={floodRef}
+                        data-surface-circle='light'
                         className='absolute top-[calc(4.5rem+(100svh-4.5rem-var(--text-area))/2)] left-1/2 size-[300vmax] rounded-full bg-yellow will-change-transform wide:top-[50svh]'
                     />
                     {/* Achter de telefoon, niet achter de tekst, en toon-op-toon licht: een vol indigo woord eronder maakt de stapteksten lastig leesbaar. */}

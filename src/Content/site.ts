@@ -13,7 +13,7 @@ export const meta = {
     } satisfies Localized,
 };
 
-// null zolang de app nog niet in de store staat: de knop is dan geen link en zegt "Coming soon".
+// null zolang de app nog niet in de store staat: de knop is dan geen link maar opent de wachtlijst.
 export const storeLinks: { appStore: string | null; googlePlay: string | null } = {
     appStore: null,
     googlePlay: null,
@@ -28,7 +28,7 @@ export const header = {
 
 export const showcase = {
     // Onderaan de opening, tot je begint te scrollen: niet iedereen ziet meteen dat de pagina een verhaal is om doorheen te scrollen.
-    scrollHint: { en: 'Scroll to play the night', nl: 'Scroll en speel de avond' } satisfies Localized,
+    scrollHint: { en: 'Keep scrolling', nl: 'Scroll verder' } satisfies Localized,
     label: { en: 'How a night with UpNext goes', nl: 'Zo gaat een avond met UpNext' } satisfies Localized,
 };
 
@@ -52,13 +52,12 @@ export const callToAction = {
         nl: 'Download UpNext, maak een groep en deel de code. De rest regelt de app.',
     } satisfies Localized,
     appStore: {
+        // De tekst van de officiële badges, ook zolang de app er nog niet in staat: de knop opent dan de wachtlijst.
         overline: { en: 'Download on the', nl: 'Download in de' } satisfies Localized,
-        comingSoon: { en: 'Coming soon to the', nl: 'Binnenkort in de' } satisfies Localized,
         name: 'App Store',
     },
     googlePlay: {
         overline: { en: 'Get it on', nl: 'Ontdek het op' } satisfies Localized,
-        comingSoon: { en: 'Coming soon on', nl: 'Binnenkort op' } satisfies Localized,
         name: 'Google Play',
     },
 };

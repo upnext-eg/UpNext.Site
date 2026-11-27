@@ -435,13 +435,18 @@ export default function ScrollShowcase(props: IProps) {
 
     return (
         <section ref={sectionRef} aria-label={t(showcase.label)} id='zo-werkt-het'>
+            {/* Hoogte max(lvh, svh) en verticaal niet afknippen: in de in-app browser van o.a. LinkedIn (iOS) is lvh kleiner dan het zichtbare scherm en groeit svh mee met de balken.
+                ScrollTrigger zet de hoogte van de gepinde stage vast in pixels, dus de lagen erin rekenen zelf met svh en mogen onder de stage doorlopen. Horizontaal blijft clip. */}
             <div
                 ref={stageRef}
                 style={stageStyle}
-                className='relative h-lvh overflow-hidden [--page-pad:clamp(1.5rem,5vw,5rem)] [--phone-h:clamp(220px,calc(100svh-24.5rem),600px)] [--phone-w:calc(var(--phone-h)*0.48)] [--text-area:18rem] [--text-gap:clamp(1.5rem,4vw,4rem)] wide:[--phone-h:min(74svh,720px)]'
+                className='relative h-[max(100lvh,100svh)] overflow-x-clip [--page-pad:clamp(1.5rem,5vw,5rem)] [--phone-h:clamp(220px,calc(100svh-24.5rem),600px)] [--phone-w:calc(var(--phone-h)*0.48)] [--text-area:18rem] [--text-gap:clamp(1.5rem,4vw,4rem)] wide:[--phone-h:min(74svh,720px)]'
             >
                 {/* Het UP NEXT-moment: een gele cirkel die vanuit de telefoon het hele beeld vult, met "UP NEXT!" erachter. Alleen scale en opacity. */}
-                <div aria-hidden='true' className='pointer-events-none absolute inset-0 overflow-hidden'>
+                <div
+                    aria-hidden='true'
+                    className='pointer-events-none absolute inset-x-0 top-0 h-[max(100%,100svh)] overflow-hidden'
+                >
                     <div
                         ref={floodRef}
                         data-surface-circle='light'
